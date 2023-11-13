@@ -1,4 +1,4 @@
-package com.project.taskmanager
+package com.project.composequadrant
 
 import org.junit.Test
 
