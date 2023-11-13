@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.project.happybirthday'
+    namespace 'com.project.composearticle'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.project.happybirthday"
+        applicationId "com.project.composearticle"
         minSdk 24
         targetSdk 33
         versionCode 1
