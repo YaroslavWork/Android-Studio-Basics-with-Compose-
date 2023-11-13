@@ -1,4 +1,4 @@
-package com.project.composearticle.ui.theme
+package com.project.taskmanager.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

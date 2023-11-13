@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.project.composearticle'
+    namespace 'com.project.taskmanager'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.project.composearticle"
+        applicationId "com.project.taskmanager"
         minSdk 24
         targetSdk 33
         versionCode 1
