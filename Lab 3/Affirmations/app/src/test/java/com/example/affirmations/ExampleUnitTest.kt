@@ -1,4 +1,4 @@
-package com.project.affirmations
+package com.example.affirmations
 
 import org.junit.Test
 

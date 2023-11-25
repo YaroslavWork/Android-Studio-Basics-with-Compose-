@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.project.affirmations"
+    namespace = "com.example.affirmations"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.project.affirmations"
+        applicationId = "com.example.affirmations"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
