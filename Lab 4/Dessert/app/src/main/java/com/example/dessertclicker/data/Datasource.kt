@@ -17,11 +17,17 @@
 package com.example.dessertclicker.data
 
 import com.example.dessertclicker.R
-import com.example.dessertclicker.model.Dessert
 
 /**
  * [Datasource] generates a list of [Dessert]
  */
+
+data class Dessert(
+    val imageId: Int,
+    val price: Int,
+    val startProductionAmount: Int
+)
+
 object Datasource {
     val dessertList = listOf(
         Dessert(R.drawable.cupcake, 5, 0),
