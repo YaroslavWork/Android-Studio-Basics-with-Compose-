@@ -64,15 +64,11 @@ class DessertViewModel: ViewModel() {
     }
 
     fun updateAppState() {
-        _uiState.update { currentState ->
-            currentState.copy(
-                curDesertIndex = getNextDessert(),
-                dessertSold = _dessertSold++,
-                curDessertPrice = Datasource.dessertList[_curDessertResId].price,
-                revenue = Datasource.dessertList[_curDessertResId].price,
-                curDessertResId = getNextDessert()
-            )
-        }
+
+        _uiState.value = DessertUiState(
+            dessertSold = _dessertSold++,
+            revenue = _revenue++,
+        )
     }
 
     fun getNextDessert(): Int {

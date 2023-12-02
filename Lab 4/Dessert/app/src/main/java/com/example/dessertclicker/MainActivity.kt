@@ -46,6 +46,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -169,6 +170,8 @@ private fun shareSoldDessertsInformation(intentContext: Context, dessertsSold: I
 private fun DessertClickerApp(
     dessertViewModel: DessertViewModel = viewModel(),
 ) {
+    val dessertUiState by dessertViewModel.uiState.collectAsState()
+
     Scaffold(
         topBar = {
             val intentContext = LocalContext.current
@@ -187,9 +190,9 @@ private fun DessertClickerApp(
         }
     ) { contentPadding ->
         DessertClickerScreen(
-            revenue = dessertViewModel.revenue,
-            dessertsSold = dessertViewModel.dessertSold,
-            dessertImageId = dessertViewModel.curDessertResId,
+            revenue = dessertUiState.revenue,
+            dessertsSold = dessertUiState.dessertSold,
+            dessertImageId = dessertUiState.curDessertResId,
             onDessertClicked = {
                 dessertViewModel.updateAppState()
             },
