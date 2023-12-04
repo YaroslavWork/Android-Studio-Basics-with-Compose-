@@ -1,6 +1,5 @@
-package com.example.amphibians.ui.screens
+package com.example.amphibians.ui
 
-import android.net.http.HttpException
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -44,7 +43,8 @@ class AmphibiansViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as AmphibiansApplication)
+                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]
+                        as AmphibiansApplication)
                 val amphibiansRepository = application.container.amphibiansRepository
                 AmphibiansViewModel(amphibiansRepository = amphibiansRepository)
             }
