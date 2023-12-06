@@ -5,6 +5,7 @@ import com.example.mycity.R
 import com.example.mycity.model.City
 
 object LocalCitiesDataProvider {
+    val defaultCity = getCitiesData()[0]
 
     fun getCitiesData(): List<City> {
         return listOf(
