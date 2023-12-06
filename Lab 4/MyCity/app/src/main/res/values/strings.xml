@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">My City</string>
+    <string name="app_name">Find Hotels</string>
+    <string name="city_name_1">New York</string>
+    <string name="city_name_2">San Francisco</string>
+    <string name="city_name_3">Chicago</string>
+    <string name="city_name_4">Seattle</string>
+    <string name="city_name_5">Los Angeles</string>
+    <string name="description_1">The largest city in the United States, New York City is located in the state of New York and is home to over 8 million people. It is a major cultural and economic center in the world, with many museums, art galleries, and financial institutions located in the city.</string>
+    <string name="description_2">San Francisco is a city in the state of California in the United States. It is located on the west coast of the country and is home to over 800,000 people. It is a major center for technology and innovation, with many tech companies headquartered in the city.</string>
+    <string name="description_3">Chicago is a city in the state of Illinois in the United States. It is located in the midwest region of the country and is home to over 2.7 million people. It is a major center for finance and commerce, with many financial institutions and companies headquartered in the city.</string>
+    <string name="description_4">Seattle is a city in the state of Washington in the United States. It is located in the Pacific Northwest region of the country and is home to over 700,000 people. It is a major center for technology and innovation, with many tech companies headquartered in the city.</string>
+    <string name="description_5">Los Angeles is a city in the state of California in the United States. It is located on the west coast of the country and is home to over 3.9 million people. It is a major center for entertainment and culture, with many movie studios and theaters located in the city.</string>
+    <string name="back_button">Back</string>
 </resources>
