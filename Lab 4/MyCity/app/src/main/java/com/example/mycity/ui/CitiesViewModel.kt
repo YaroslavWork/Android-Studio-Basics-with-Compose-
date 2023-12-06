@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.update
 
 data class CitiesUiState(
     val currentCity: City = LocalCitiesDataProvider.defaultCity,
+    val region: String = "",
 )
 class CitiesViewModel : ViewModel() {
 
@@ -23,5 +24,15 @@ class CitiesViewModel : ViewModel() {
         _uiState.update {
             it.copy(currentCity = selectedCity)
         }
+    }
+
+    fun updateRegion(region: String) {
+        _uiState.update {
+            it.copy(region = region)
+        }
+    }
+
+    fun resetOrder() {
+        _uiState
     }
 }

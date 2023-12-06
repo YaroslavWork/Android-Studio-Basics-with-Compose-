@@ -32,44 +32,19 @@ import com.example.mycity.R
 import com.example.mycity.model.City
 import com.example.mycity.ui.theme.MyCityTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CitiesCategoryScreen(
     cities: List<City>,
     modifier: Modifier = Modifier,
-) {
-
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
-    Scaffold(
-        modifier = modifier
-            .fillMaxSize(),
-        topBar = {
-            CitiesTopAppBar(
-                title = "Cities",
-                canNavigateBack = false,
-                scrollBehavior = scrollBehavior
-            )
-        }
-    ) { innerPadding ->
-        CitiesBody(
-            cities = cities,
-            modifier = Modifier.padding(innerPadding)
-        )
-    }
-}
-
-@Composable
-fun CitiesBody(
-    cities: List<City>,
-    modifier: Modifier = Modifier
+    onNextClick: (City) -> Unit = {},
 ) {
     LazyColumn(modifier = modifier) {
         items(cities,  key = {it.id}) { city ->
             CityCard(
                 city = city,
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(16.dp),
+                onNextClick = { onNextClick(city) }
             )
         }
     }
@@ -79,13 +54,14 @@ fun CitiesBody(
 @Composable
 fun CityCard(
     city: City,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNextClick: () -> Unit = {},
 ) {
     Card(
         elevation = CardDefaults.cardElevation(),
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
-        onClick = { /*TODO*/ }
+        onClick = onNextClick
     ) {
         Row(
             modifier = Modifier
@@ -155,42 +131,6 @@ fun CitiesScreenPreview() {
                     imageResourceId = R.drawable.city,
                     ),
 
-            )
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CityBodyPreview() {
-    MyCityTheme {
-        CitiesBody(
-            cities = listOf(
-                City(id = 1,
-                    name = R.string.city_name_1,
-                    description = R.string.description_1,
-                    imageResourceId = R.drawable.city,
-                    ),
-                City(id = 2,
-                    name = R.string.city_name_2,
-                    description = R.string.description_2,
-                    imageResourceId = R.drawable.city,
-                    ),
-                City(id = 3,
-                    name = R.string.city_name_3,
-                    description = R.string.description_3,
-                    imageResourceId = R.drawable.city,
-                    ),
-                City(id = 4,
-                    name = R.string.city_name_4,
-                    description = R.string.description_4,
-                    imageResourceId = R.drawable.city,
-                    ),
-                City(id = 5,
-                    name = R.string.city_name_5,
-                    description = R.string.description_5,
-                    imageResourceId = R.drawable.city,
-                    ),
             )
         )
     }

@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -29,68 +31,40 @@ import com.example.mycity.ui.theme.MyCityTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CitiesLocalCategoryScreen(
+    regions: List<String>,
     modifier: Modifier = Modifier,
-    onCancelClick : () -> Unit = {}
+    onCancelClick : () -> Unit = {},
+    onNextClick : (String) -> Unit = {}
 ) {
-
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
-    Scaffold(
-        modifier = modifier
-            .fillMaxSize(),
-        topBar = {
-            CitiesTopAppBar(
-                title = "Cities: Region",
-                canNavigateBack = true,
-                scrollBehavior = scrollBehavior
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            LocalCard(
-                text = "Center",
-                modifier = Modifier
-                    .padding(16.dp)
-            )
-            LocalCard(
-                text = "North",
-                modifier = Modifier
-                    .padding(16.dp)
-            )
-            LocalCard(
-                text = "South",
-                modifier = Modifier
-                    .padding(16.dp)
-            )
-            LocalCard(
-                text = "East",
-                modifier = Modifier
-                    .padding(16.dp)
-            )
-            LocalCard(
-                text = "West",
-                modifier = Modifier
-                    .padding(16.dp)
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Button(
-                onClick = onCancelClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(72.dp)
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = "Cancel",
-                    fontSize = 16.sp,
-                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+    Column(
+        modifier = Modifier
+    ) {
+        LazyColumn(modifier = modifier) {
+            items(regions) {
+                LocalCard(
+                    text = it,
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center
+                        .padding(16.dp),
+                    onNextClick = { onNextClick(it) }
                 )
             }
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Button(
+            onClick = onCancelClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(72.dp)
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Cancel",
+                fontSize = 16.sp,
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
@@ -99,7 +73,8 @@ fun CitiesLocalCategoryScreen(
 @Composable
 fun LocalCard(
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNextClick: () -> Unit = {},
 ) {
     Card(
         elevation = CardDefaults.cardElevation(),
@@ -107,7 +82,7 @@ fun LocalCard(
             .fillMaxWidth()
             .height(72.dp),
         shape = RoundedCornerShape(16.dp),
-        onClick = { /*TODO*/ }
+        onClick = onNextClick
 
     ) {
         Text(
@@ -126,7 +101,7 @@ fun LocalCard(
 @Composable
 fun CityLocalPreview() {
     MyCityTheme {
-        CitiesLocalCategoryScreen()
+        CitiesLocalCategoryScreen(listOf("Center", "North", "South", "East", "West"))
     }
 }
 

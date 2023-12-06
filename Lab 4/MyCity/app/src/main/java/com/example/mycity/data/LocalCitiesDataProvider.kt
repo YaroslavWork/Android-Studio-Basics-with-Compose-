@@ -46,4 +46,8 @@ object LocalCitiesDataProvider {
             ),
         )
     }
+
+    fun getRegions(): List<String> {
+        return listOf("Center", "North", "South", "West", "East")
+    }
 }
