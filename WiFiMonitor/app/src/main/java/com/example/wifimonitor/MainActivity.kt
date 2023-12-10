@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.wifimonitor.ui.screens.HomeScreen
 import com.example.wifimonitor.ui.theme.WiFiMonitorTheme
 
 class MainActivity : ComponentActivity() {
@@ -46,8 +47,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column {
-                        WifiMonitoring()
-                        WifiScanner()
+                        WifiMonitorApp()
                     }
                 }
             }
@@ -56,93 +56,70 @@ class MainActivity : ComponentActivity() {
 }
 
 
-@Composable
-fun WifiMonitoring() {
-    val context = LocalContext.current
-    val wifiManager = ContextCompat.getSystemService(context, WifiManager::class.java)
+//@Composable
+//fun WifiMonitoring() {
+//    val context = LocalContext.current
+//    val wifiManager = ContextCompat.getSystemService(context, WifiManager::class.java)
+//
+//    var wifiInfo by remember { mutableStateOf<WifiInfo?>(null) }
+//
+//    LaunchedEffect(wifiManager) {
+//        val receiver = WifiReceiver {
+//            wifiInfo = it
+//        }
+//        val filter = IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION)
+//        context.registerReceiver(receiver, filter)
+//
+//    }
+//
+//    Column(
+//    ) {
+//        Button(onClick = { wifiManager?.startScan() }) {
+//            Text(text = "Update")
+//        }
+//        wifiInfo?.let {
+//            Text("SSID: ${it.ssid}")
+//            Text("BSSID: ${it.bssid}")
+//            Text("Signal Strength: ${it.rssi} dBm")
+//            Text("Link Speed: ${it.linkSpeed} Mbps")
+//            Text("Frequency: ${it.frequency} MHz")
+//        } ?: Text("No WiFi connection")
+//    }
+//}
 
-    var wifiInfo by remember { mutableStateOf<WifiInfo?>(null) }
+//@Composable
+//fun WifiScanner() {
+//    val context = LocalContext.current
+//    val wifiManager = ContextCompat.getSystemService(context, WifiManager::class.java)
+//    var wifiScanResults by remember { mutableStateOf(emptyList<ScanResult>()) }
+//
+//    LaunchedEffect(Unit) {
+//        val receiver = WifiScanReceiver {
+//            wifiScanResults = it
+//        }
+//        val filter = IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+//        context.registerReceiver(receiver, filter)
+//
+//        // Start WiFi scan
+//        context.registerReceiver(receiver, IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+//        context.registerReceiver(receiver, IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+//        wifiManager?.startScan()
+//    }
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(16.dp),
+//    ) {
+//        Text("Amount of WiFi networks found: ${wifiScanResults.size}")
+//        if (wifiScanResults.isNotEmpty()) {
+//            wifiScanResults.forEach { result ->
+//                Text("SSID: ${result.SSID}, RSSI: ${result.level} dBm")
+//            }
+//        } else {
+//            Text("No WiFi networks found.")
+//        }
+//
+//    }
+//}
 
-    LaunchedEffect(wifiManager) {
-        val receiver = WifiReceiver {
-            wifiInfo = it
-        }
-        val filter = IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION)
-        context.registerReceiver(receiver, filter)
-
-    }
-
-    Column(
-    ) {
-        Button(onClick = { wifiManager?.startScan() }) {
-            Text(text = "Update")
-        }
-        wifiInfo?.let {
-            Text("SSID: ${it.ssid}")
-            Text("BSSID: ${it.bssid}")
-            Text("Signal Strength: ${it.rssi} dBm")
-            Text("Link Speed: ${it.linkSpeed} Mbps")
-            Text("Frequency: ${it.frequency} MHz")
-        } ?: Text("No WiFi connection")
-    }
-}
-
-@Composable
-fun WifiScanner() {
-    val context = LocalContext.current
-    val wifiManager = ContextCompat.getSystemService(context, WifiManager::class.java)
-    var wifiScanResults by remember { mutableStateOf(emptyList<ScanResult>()) }
-
-    LaunchedEffect(Unit) {
-        val receiver = WifiScanReceiver {
-            wifiScanResults = it
-        }
-        val filter = IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        context.registerReceiver(receiver, filter)
-
-        // Start WiFi scan
-        context.registerReceiver(receiver, IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
-        context.registerReceiver(receiver, IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
-        wifiManager?.startScan()
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-    ) {
-        Text("Amount of WiFi networks found: ${wifiScanResults.size}")
-        if (wifiScanResults.isNotEmpty()) {
-            wifiScanResults.forEach { result ->
-                Text("SSID: ${result.SSID}, RSSI: ${result.level} dBm")
-            }
-        } else {
-            Text("No WiFi networks found.")
-        }
-
-    }
-}
-
-class WifiReceiver(private val onWifiInfoChanged: (WifiInfo) -> Unit) : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action == WifiManager.NETWORK_STATE_CHANGED_ACTION) {
-            val wifiInfo =
-                ContextCompat.getSystemService(context!!, WifiManager::class.java)?.connectionInfo
-            wifiInfo?.let {
-                onWifiInfoChanged(it)
-            }
-        }
-    }
-}
-
-class WifiScanReceiver(private val onScanResult: (List<ScanResult>) -> Unit) : BroadcastReceiver() {
-    @SuppressLint("MissingPermission")
-    override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action == WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) {
-            val wifiManager =
-                ContextCompat.getSystemService(context!!, WifiManager::class.java)
-            val scanResults = wifiManager?.scanResults ?: emptyList()
-            onScanResult(scanResults)
-        }
-    }
-}
