@@ -20,17 +20,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import android.util.Log
 
-class WifiReceiver(private val onWifiInfoChanged: (WifiInfo) -> Unit) : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action == WifiManager.NETWORK_STATE_CHANGED_ACTION) {
-            val wifiInfo =
-                (context?.getSystemService(Context.WIFI_SERVICE) as? WifiManager)?.connectionInfo
-            wifiInfo?.let {
-                onWifiInfoChanged(it)
-            }
-        }
-    }
-}
 
 class WifiScanReceiver(private val onScanResult: (List<ScanResult>) -> Unit) : BroadcastReceiver() {
     @SuppressLint("MissingPermission")
@@ -78,7 +67,7 @@ class HomeViewModel (context: Context) : ViewModel() {
                         activeWifiInfo?.linkSpeed ?: 0
                     ),
                     nearbyWifi = wifiScanResults.map {
-                        Wifi(ssid = it.SSID, rssi = it.level)
+                        Wifi(ssid = it.SSID, rssi = it.level, frequency = it.frequency)
                     }
                 )
                 Log.d("NearbyWifi", "Nearby wifi: ${wifiScanResults.size}")

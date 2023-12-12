@@ -35,7 +35,9 @@ fun HomeScreen(
                     "BSSID: ${homeUiState.activeWifi.bssid}\n" +
                     "RSSI: ${homeUiState.activeWifi.rssi} dBm\n" +
                     "Link Speed: ${homeUiState.activeWifi.linkSpeed} Mbps\n" +
-                    "Frequency: ${homeUiState.activeWifi.frequency} MHz\n",
+                    "Frequency: ${homeUiState.activeWifi.frequency} MHz\n" +
+                    "Estimated Distance: ${homeUiState.activeWifi.estimatedDistance} m\n" +
+                    "Record Time: ${homeUiState.activeWifi.recordTime}\n"
         )
 
         LazyColumn() {
@@ -47,7 +49,9 @@ fun HomeScreen(
                 items(homeUiState.nearbyWifi) { wifi ->
                     Text(
                         text = "SSID: ${wifi.ssid}\n" +
-                                "RSSI: ${wifi.rssi} dBm\n"
+                                "RSSI: ${wifi.rssi} dBm\n" +
+                                "Frequency: ${wifi.frequency} MHz\n" +
+                                "Estimated Distance: ${wifi.estimatedDistance} m\n"
                     )
                 }
             }
