@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.wifimonitor.data.AppContainer
 import com.example.wifimonitor.data.AppDataContainer
 
+//@HiltAndroidApp
 class WifiMonitorApplication: Application() {
     lateinit var container: AppContainer
 

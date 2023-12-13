@@ -7,6 +7,7 @@ interface AppContainer {
 }
 
 class AppDataContainer(private val context: Context) : AppContainer {
-    override val wifiMonitorRepository: WifiMonitorRepository
-        get() = TODO("Not yet implemented")
+    override val wifiMonitorRepository: WifiMonitorRepository by lazy {
+        OfflineWifiMonitorRepository(WifiMonitorDatabase.getDatabase(context).wifiMonitorDao())
+    }
 }

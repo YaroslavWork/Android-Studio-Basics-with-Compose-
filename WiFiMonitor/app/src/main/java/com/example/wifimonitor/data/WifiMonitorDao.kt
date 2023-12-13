@@ -1,0 +1,27 @@
+package com.example.wifimonitor.data
+
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface WifiMonitorDao {
+    @Query("SELECT * from wifi ORDER BY timestamp DESC LIMIT :amount")
+    fun getLastItems(amount: Int = 1): Flow<List<Wifi>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(wifi: Wifi)
+
+    @Delete
+    suspend fun delete(wifi: Wifi)
+
+    @Query("DELETE FROM wifi")
+    suspend fun deleteAll()
+
+    @Update
+    suspend fun update(wifi: Wifi)
+}

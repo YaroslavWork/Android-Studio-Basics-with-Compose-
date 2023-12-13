@@ -33,8 +33,10 @@ class WifiScanReceiver(private val onScanResult: (List<ScanResult>) -> Unit) : B
     }
 }
 
-class HomeViewModel (context: Context) : ViewModel() {
-    val context = context
+class HomeViewModel (
+    @field:SuppressLint("StaticFieldLeak") val context: Context,
+    //private val wifiMonitorRepository: WifiMonitorRepository
+) : ViewModel() {
     private val _homeUiState = MutableStateFlow(HomeUiState())
     val homeUiState: MutableStateFlow<HomeUiState> = _homeUiState
 
@@ -60,15 +62,16 @@ class HomeViewModel (context: Context) : ViewModel() {
                 val activeWifiInfo = wifiManager?.connectionInfo
                 val updatedUiState = HomeUiState(
                     activeWifi = Wifi(
-                        activeWifiInfo?.ssid ?: "",
-                        activeWifiInfo?.bssid ?: "",
-                        activeWifiInfo?.rssi ?: 0,
-                        activeWifiInfo?.frequency ?: 0,
-                        activeWifiInfo?.linkSpeed ?: 0
+                        ssid = activeWifiInfo?.ssid ?: "",
+                        bssid = activeWifiInfo?.bssid ?: "",
+                        rssi = activeWifiInfo?.rssi ?: 0,
+                        frequency = activeWifiInfo?.frequency ?: 0,
+                        linkSpeed = activeWifiInfo?.linkSpeed ?: 0
                     ),
                     nearbyWifi = wifiScanResults.map {
                         Wifi(ssid = it.SSID, rssi = it.level, frequency = it.frequency)
-                    }
+                    },
+                    isConnecting = wifiManager?.isWifiEnabled ?: false
                 )
                 Log.d("NearbyWifi", "Nearby wifi: ${wifiScanResults.size}")
                 _homeUiState.value = updatedUiState
@@ -87,5 +90,6 @@ class HomeViewModel (context: Context) : ViewModel() {
 
 data class HomeUiState(
     val activeWifi: Wifi = Wifi(),
-    val nearbyWifi: List<Wifi> = emptyList()
+    val nearbyWifi: List<Wifi> = emptyList(),
+    val isConnecting: Boolean = false,
 )
