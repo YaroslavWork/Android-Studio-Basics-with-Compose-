@@ -19,19 +19,8 @@ class InformationViewModel(
     private val wifiMonitorRepository: WifiMonitorRepository
 ) : ViewModel() {
 
-//    var wifiInformationUiState: WifiInformationUiState by mutableStateOf(WifiInformationUiState())
-//        private set
-//
-//    init {
-//        viewModelScope.launch {
-//            wifiMonitorRepository.getLastItemsStream(10).collect { wifiList ->
-//                wifiInformationUiState = wifiInformationUiState.copy(wifiStates = wifiList)
-//            }
-//        }
-//    }
-
     val uiState: StateFlow<WifiInformationUiState> =
-        wifiMonitorRepository.getLastItemsStream(10)
+        wifiMonitorRepository.getLastActiveItemsStream(10)
             .filterNotNull()
             .map { wifiList ->
                 WifiInformationUiState(wifiStates = wifiList)

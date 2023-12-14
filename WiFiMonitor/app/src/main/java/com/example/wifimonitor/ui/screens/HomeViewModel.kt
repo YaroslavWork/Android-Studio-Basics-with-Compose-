@@ -19,6 +19,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import android.util.Log
+import kotlinx.coroutines.flow.flatMap
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.toList
+import java.text.DecimalFormat
+import kotlin.math.abs
+import kotlin.math.log10
+import kotlin.math.pow
 
 
 class WifiScanReceiver(private val onScanResult: (List<ScanResult>) -> Unit) : BroadcastReceiver() {
@@ -33,16 +41,31 @@ class WifiScanReceiver(private val onScanResult: (List<ScanResult>) -> Unit) : B
     }
 }
 
+// Tłumienie w swobodnej przestrzeni
+private fun calculateDistance(rssi: Int, frequency: Int): Double {
+    if (frequency == -1 || rssi == -1) {
+        return -1.0
+    }
+
+    val exp = 10.0.pow((abs(rssi) + 27.55 - 20 * log10(frequency.toDouble())) / 20)
+    return DecimalFormat("#.##").format(exp).toDouble()
+}
+
 class HomeViewModel (
-    @field:SuppressLint("StaticFieldLeak") val context: Context,
-    //private val wifiMonitorRepository: WifiMonitorRepository
+    private val application: WifiMonitorApplication,
+    private val wifiMonitorRepository: WifiMonitorRepository
 ) : ViewModel() {
+    private val TIME_DELAY = 5000L
+
+    @SuppressLint("StaticFieldLeak")
+    private val context = application.applicationContext
+
     private val _homeUiState = MutableStateFlow(HomeUiState())
     val homeUiState: MutableStateFlow<HomeUiState> = _homeUiState
 
-    val wifiManager = ContextCompat.getSystemService(context, WifiManager::class.java)
+    private val wifiManager = ContextCompat.getSystemService(context, WifiManager::class.java)
 
-    val receiver = WifiScanReceiver {
+    private val receiver = WifiScanReceiver {
         wifiScanResults = it
     }
 
@@ -60,23 +83,45 @@ class HomeViewModel (
             while (true) {
                 wifiManager?.startScan()
                 val activeWifiInfo = wifiManager?.connectionInfo
-                val updatedUiState = HomeUiState(
-                    activeWifi = Wifi(
-                        ssid = activeWifiInfo?.ssid ?: "",
-                        bssid = activeWifiInfo?.bssid ?: "",
-                        rssi = activeWifiInfo?.rssi ?: 0,
-                        frequency = activeWifiInfo?.frequency ?: 0,
-                        linkSpeed = activeWifiInfo?.linkSpeed ?: 0
-                    ),
-                    nearbyWifi = wifiScanResults.map {
-                        Wifi(ssid = it.SSID, rssi = it.level, frequency = it.frequency)
-                    },
-                    isConnecting = wifiManager?.isWifiEnabled ?: false
+
+
+                val activeWifi: Wifi = Wifi(
+                    ssid = activeWifiInfo?.ssid ?: "",
+                    bssid = activeWifiInfo?.bssid ?: "",
+                    rssi = activeWifiInfo?.rssi ?: -1,
+                    frequency = activeWifiInfo?.frequency ?: -1,
+                    linkSpeed = activeWifiInfo?.linkSpeed ?: -1,
+                    estimatedDistance = calculateDistance(activeWifiInfo?.rssi ?: -1, activeWifiInfo?.frequency ?: -1),
+                    isActive = true
                 )
-                Log.d("NearbyWifi", "Nearby wifi: ${wifiScanResults.size}")
+                val nearbyWifi: List<Wifi> = wifiScanResults.map {
+                    Wifi(
+                        ssid = it.SSID,
+                        bssid = it.BSSID,
+                        rssi = it.level,
+                        frequency = it.frequency,
+                        estimatedDistance = calculateDistance(it.level, it.frequency),
+                        isActive = false
+                        )
+                }
+                val isConnecting = wifiManager?.isWifiEnabled ?: false
+
+                if (isConnecting) {
+                    wifiMonitorRepository.insertItem(activeWifi)
+                }
+                for (wifi in nearbyWifi) {
+                    wifiMonitorRepository.insertItem(wifi)
+                }
+
+                val updatedUiState = HomeUiState(
+                    activeWifi = activeWifi,
+                    nearbyWifi = nearbyWifi,
+                    isConnecting = isConnecting
+                )
+
                 _homeUiState.value = updatedUiState
 
-                delay(10000)
+                delay(TIME_DELAY)
             }
         }
     }

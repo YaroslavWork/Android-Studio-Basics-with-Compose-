@@ -21,7 +21,7 @@ fun WifiMonitorNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
-    val homeViewModel = HomeViewModel(context = LocalContext.current)
+//    val homeViewModel = HomeViewModel(context = LocalContext.current)
 
     NavHost(
         navController = navController,
@@ -30,7 +30,6 @@ fun WifiMonitorNavHost(
     ) {
         composable(route = HomeDestination.route) {
             HomeScreen(
-                viewModel = homeViewModel,
                 navigateToInformationList = { navController.navigate(WifiInformationDestination.route) }
             )
         }

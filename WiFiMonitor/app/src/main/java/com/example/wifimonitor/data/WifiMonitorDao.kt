@@ -13,6 +13,12 @@ interface WifiMonitorDao {
     @Query("SELECT * from wifi ORDER BY timestamp DESC LIMIT :amount")
     fun getLastItems(amount: Int = 1): Flow<List<Wifi>>
 
+    @Query("SELECT * from wifi WHERE bssid = :bssid ORDER BY timestamp DESC LIMIT :amount")
+    fun getLastItemsByBssid(bssid: String, amount: Int = 1): Flow<List<Wifi>>
+
+    @Query("SELECT * from wifi WHERE isActive = 1 ORDER BY timestamp DESC LIMIT :amount")
+    fun getLastActiveItems(amount: Int = 1): Flow<List<Wifi>>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(wifi: Wifi)
 
@@ -24,4 +30,5 @@ interface WifiMonitorDao {
 
     @Update
     suspend fun update(wifi: Wifi)
+
 }

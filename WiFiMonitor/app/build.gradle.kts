@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.wifimonitor"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -84,4 +84,7 @@ dependencies {
     //hilt
     implementation("com.google.dagger:hilt-android:2.48.1")
     kapt("com.google.dagger:hilt-compiler:2.48.1")
+
+    //Graphic Charts
+    implementation("co.yml:ycharts:2.1.0")
 }

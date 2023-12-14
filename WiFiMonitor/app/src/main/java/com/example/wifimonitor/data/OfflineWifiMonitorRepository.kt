@@ -7,6 +7,11 @@ class OfflineWifiMonitorRepository(
 ) : WifiMonitorRepository {
     override fun getLastItemsStream(amount: Int): Flow<List<Wifi>> = wifiMonitorDao.getLastItems(amount)
 
+    override fun getLastItemsByBssidStream(bssid: String, amount: Int): Flow<List<Wifi>> = wifiMonitorDao.getLastItemsByBssid(bssid)
+
+
+    override fun getLastActiveItemsStream(amount: Int): Flow<List<Wifi>> = wifiMonitorDao.getLastActiveItems(amount)
+
     override suspend fun insertItem(wifi: Wifi) = wifiMonitorDao.insert(wifi)
 
     override suspend fun deleteItem(wifi: Wifi) = wifiMonitorDao.delete(wifi)

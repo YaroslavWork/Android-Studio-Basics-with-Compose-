@@ -18,20 +18,13 @@ data class Wifi(
     val bssid: String? = "",
     val rssi: Int = -1,
     val frequency: Int? = -1,
-    val linkSpeed: Int = 0,
-    val estimatedDistance: Double = calculateDistance(rssi, frequency ?: -1),
+    val linkSpeed: Int = -1,
+    val estimatedDistance: Double = -1.0,
+    val isActive: Boolean = false,
     val timestamp: Long = System.currentTimeMillis(),
     val recordTime: String = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(
         timestamp
     )
 )
 
-// Tłumienie w swobodnej przestrzeni
-private fun calculateDistance(rssi: Int, frequency: Int): Double {
-    if (frequency == -1 || rssi == -1) {
-        return -1.0
-    }
 
-    val exp = 10.0.pow((abs(rssi) + 27.55 - 20 * log10(frequency.toDouble())) / 20)
-    return DecimalFormat("#.##").format(exp).toDouble()
-}

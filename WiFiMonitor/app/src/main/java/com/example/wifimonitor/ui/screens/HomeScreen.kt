@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wifimonitor.R
 import com.example.wifimonitor.WifiMonitorTopAppBar
+import com.example.wifimonitor.ui.AppViewModelProvider
 import com.example.wifimonitor.ui.navigation.NavigationDestination
 
 object HomeDestination : NavigationDestination {
@@ -36,36 +37,21 @@ object HomeDestination : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel,
     modifier: Modifier = Modifier,
     navigateToInformationList: () -> Unit,
 ) {
+    val viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
     val homeUiState by viewModel.homeUiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            Column {
-                WifiMonitorTopAppBar(
-                    title = stringResource(id = HomeDestination.titleRes),
-                    canNavigateBack = false,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-                Button(
-                    onClick = { navigateToInformationList() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            bottom = 8.dp
-                        )
-                ) {
-                    Text(text = "Check WiFi Data")
-                }
-            }
+            WifiMonitorTopAppBar(
+                title = stringResource(id = HomeDestination.titleRes),
+                canNavigateBack = false,
+                navigateUp = { },
+            )
         }
     ) { innerPadding ->
         Column(
@@ -73,6 +59,18 @@ fun HomeScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
+            Button(
+                onClick = { navigateToInformationList() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 8.dp
+                    )
+            ) {
+                Text(text = "Check WiFi Data")
+            }
             if (homeUiState.isConnecting) {
                 Text(
                     text = "SSID: ${homeUiState.activeWifi.ssid}\n" +
@@ -86,7 +84,6 @@ fun HomeScreen(
             } else {
                 Text(text = "No active wifi found")
             }
-
             LazyColumn(
                 modifier = Modifier
                     .padding(16.dp)
