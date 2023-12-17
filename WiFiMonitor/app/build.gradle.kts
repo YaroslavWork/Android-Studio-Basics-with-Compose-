@@ -87,4 +87,7 @@ dependencies {
 
     //Graphic Charts
     implementation("co.yml:ycharts:2.1.0")
+
+    //Permissions
+    implementation("com.google.accompanist:accompanist-permissions:0.24.13-rc")
 }

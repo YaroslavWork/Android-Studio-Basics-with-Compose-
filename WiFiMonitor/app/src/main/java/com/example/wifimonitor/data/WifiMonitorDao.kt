@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import java.sql.Timestamp
 
 @Dao
 interface WifiMonitorDao {
@@ -18,6 +19,9 @@ interface WifiMonitorDao {
 
     @Query("SELECT * from wifi WHERE isActive = 1 ORDER BY timestamp DESC LIMIT :amount")
     fun getLastActiveItems(amount: Int = 1): Flow<List<Wifi>>
+
+    @Query("SELECT * from wifi WHERE isActive = 1 AND timestamp > :timestamp ORDER BY timestamp DESC")
+    fun getLastActiveItemsBySeconds(timestamp: Long): Flow<List<Wifi>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(wifi: Wifi)

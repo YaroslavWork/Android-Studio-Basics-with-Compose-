@@ -13,6 +13,8 @@ import com.example.wifimonitor.ui.screens.HomeDestination
 import com.example.wifimonitor.ui.screens.HomeScreen
 import com.example.wifimonitor.ui.screens.HomeViewModel
 import com.example.wifimonitor.ui.screens.InformationViewModel
+import com.example.wifimonitor.ui.screens.PermissionsDestination
+import com.example.wifimonitor.ui.screens.RequestPermission
 import com.example.wifimonitor.ui.screens.WifiInformationDestination
 import com.example.wifimonitor.ui.screens.WifiInformationScreen
 
@@ -21,13 +23,17 @@ fun WifiMonitorNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
-//    val homeViewModel = HomeViewModel(context = LocalContext.current)
-
     NavHost(
         navController = navController,
-        startDestination = HomeDestination.route,
+        startDestination = PermissionsDestination.route,
         modifier = modifier
     ) {
+        composable(route = PermissionsDestination.route) {
+            RequestPermission(
+                permission = android.Manifest.permission.ACCESS_FINE_LOCATION,
+                navigateToHomeList = { navController.navigate(HomeDestination.route) }
+            )
+        }
         composable(route = HomeDestination.route) {
             HomeScreen(
                 navigateToInformationList = { navController.navigate(WifiInformationDestination.route) }

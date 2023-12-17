@@ -19,9 +19,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import android.util.Log
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMap
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.toList
 import java.text.DecimalFormat
 import kotlin.math.abs
@@ -76,17 +79,40 @@ class HomeViewModel (
         updateWifi()
     }
 
+    val estimatedDistanceUiState: StateFlow<EstimatedDistanceUiState>
+        = wifiMonitorRepository.getLastActiveItemsStream(5)
+        .filterNotNull()
+        .map { wifiList ->
+            findMinAndMaxEstimateDistance(wifiList)
+        }.stateIn(
+            scope = viewModelScope,
+            started = kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(TIME_DELAY),
+            initialValue = EstimatedDistanceUiState()
+        )
 
-    @SuppressLint("MissingPermission")
+    private fun findMinAndMaxEstimateDistance(wifiList: List<Wifi>): EstimatedDistanceUiState {
+        val maxEstimateDistance = wifiList
+            .maxByOrNull { it.estimatedDistance }?.estimatedDistance ?: -1.0
+        val minEstimateDistance = wifiList
+            .minByOrNull { it.estimatedDistance }?.estimatedDistance ?: -1.0
+
+        return EstimatedDistanceUiState(
+            activeMinEstimatedDistance = minEstimateDistance,
+            activeMaxEstimatedDistance = maxEstimateDistance
+        )
+    }
+
+
     fun updateWifi() {
         viewModelScope.launch {
             while (true) {
+                // Use deprecated method to get active WiFi info (for API < 29)
                 wifiManager?.startScan()
                 val activeWifiInfo = wifiManager?.connectionInfo
 
-
+                val activeSsid = (activeWifiInfo?.ssid ?: "").replace("\"", "")
                 val activeWifi: Wifi = Wifi(
-                    ssid = activeWifiInfo?.ssid ?: "",
+                    ssid = activeSsid,
                     bssid = activeWifiInfo?.bssid ?: "",
                     rssi = activeWifiInfo?.rssi ?: -1,
                     frequency = activeWifiInfo?.frequency ?: -1,
@@ -106,7 +132,7 @@ class HomeViewModel (
                 }
                 val isConnecting = wifiManager?.isWifiEnabled ?: false
 
-                if (isConnecting) {
+                if (isConnecting && activeWifi.rssi != -1) {
                     wifiMonitorRepository.insertItem(activeWifi)
                 }
                 for (wifi in nearbyWifi) {
@@ -137,4 +163,9 @@ data class HomeUiState(
     val activeWifi: Wifi = Wifi(),
     val nearbyWifi: List<Wifi> = emptyList(),
     val isConnecting: Boolean = false,
+)
+
+data class EstimatedDistanceUiState(
+    val activeMinEstimatedDistance: Double = -1.0,
+    val activeMaxEstimatedDistance: Double = -1.0
 )

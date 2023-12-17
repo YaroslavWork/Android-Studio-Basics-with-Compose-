@@ -9,6 +9,8 @@ interface WifiMonitorRepository {
 
     fun getLastActiveItemsStream(amount: Int = 1): Flow<List<Wifi>>
 
+    fun getLastActiveItemsBySecondsStream(timestamp: Long): Flow<List<Wifi>>
+
     suspend fun insertItem(wifi: Wifi)
 
     suspend fun deleteItem(wifi: Wifi)
@@ -16,5 +18,7 @@ interface WifiMonitorRepository {
     suspend fun deleteAllItems()
 
     suspend fun updateItem(wifi: Wifi)
+
+
 
 }

@@ -2,4 +2,20 @@
     <string name="app_name">WiFi Monitor</string>
     <string name="back_button">Back</string>
     <string name="wifi_information">WiFi Information</string>
+    <string name="title_recorded_active_wi_fi">Recorded Active Wi-Fi</string>
+    <string name="title_ssid">SSID</string>
+    <string name="title_bssid">BSSID</string>
+    <string name="title_estimated_distance">Estimated Distance</string>
+    <string name="title_link_speed">Link Speed</string>
+    <string name="title_rssi">RSSI</string>
+    <string name="title_frequency">Frequency</string>
+    <string name="info_no_active_wifi_found">No active wifi found</string>
+    <string name="title_nearby_wi_fi">Nearby Wi-Fi (%d Wi-Fi)</string>
+    <string name="title_active_wi_fi">Active Wi-Fi</string>
+    <string name="button_check_wi_fi_data">Check Wi-Fi Data</string>
+    <string name="chart_legend">The vertical axis represents the RSSI value in dBm.\nThe horizontal axis represents the time in seconds since the start of the recording.</string>
+    <string name="permission_denied">Give this app a precise location to proceed. If it doesn\'t work, then you\'ll have to manually give this app a permission from the settings.</string>
+    <string name="permission_rational">To use this app\'s functionalities, you need to give this app a precise location to proceed.</string>
+    <string name="permission_request">Permission Request</string>
+    <string name="give_permission">Give Permission</string>
 </resources>
