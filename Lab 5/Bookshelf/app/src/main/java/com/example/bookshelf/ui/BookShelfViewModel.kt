@@ -10,13 +10,14 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.bookshelf.BookshelfApplication
 import com.example.bookshelf.data.BookshelfRepository
-import com.example.bookshelf.model.Book
+import com.example.example.Book
+import com.example.example.Items
 import kotlinx.coroutines.launch
 import retrofit2.http.Query
 
 sealed class BookShelfUiState {
     object Loading: BookShelfUiState()
-    data class Success(val amphibians: String): BookShelfUiState()
+    data class Success(val items: Book): BookShelfUiState()
     data class Error(val message: String): BookShelfUiState()
 }
 

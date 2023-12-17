@@ -1,8 +1,12 @@
-package com.example.bookshelf.model
+package com.example.example
 
-data class Book(
-    val title: String,
-    val authors: List<String>,
-    val description: String,
-    val imgSrc: String
+import com.google.gson.annotations.SerializedName
+
+
+data class Book (
+
+  @SerializedName("kind"       ) var kind       : String?          = null,
+  @SerializedName("totalItems" ) var totalItems : Int?             = null,
+  @SerializedName("items"      ) var items      : ArrayList<Items> = arrayListOf()
+
 )
