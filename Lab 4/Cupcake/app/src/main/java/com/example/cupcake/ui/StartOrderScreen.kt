@@ -119,4 +119,5 @@ fun StartOrderPreview(){
         onNextButtonClicked = {},
         modifier = Modifier.fillMaxSize().padding(dimensionResource(R.dimen.padding_medium))
     )
+
 }
