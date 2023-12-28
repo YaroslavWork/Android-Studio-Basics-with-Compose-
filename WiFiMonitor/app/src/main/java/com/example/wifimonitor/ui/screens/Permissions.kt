@@ -1,5 +1,6 @@
 package com.example.wifimonitor.ui.screens
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -30,9 +31,15 @@ fun RequestPermission(
     permission: String,
     deniedMessage: String = stringResource(R.string.permission_denied),
     rationaleMessage: String = stringResource(R.string.permission_rational),
-    navigateToHomeList: () -> Unit = {}
+    navigateToHomeList: () -> Unit = {},
+    checkPermission: Boolean,
+    checkPermissionAction: () -> Unit = {},
 ) {
    val permissionState = rememberPermissionState(permission)
+
+    if (checkPermission){
+        (LocalContext.current as? Activity)?.finish()
+    }
 
     HandleRequest(
         permissionState = permissionState,
@@ -47,6 +54,7 @@ fun RequestPermission(
             )
         },
         content = {
+            checkPermissionAction()
             navigateToHomeList()
         }
     )
@@ -61,6 +69,7 @@ private fun HandleRequest(
 ) {
     when (permissionState.status) {
         is PermissionStatus.Granted -> {
+            //(LocalContext.current as? Activity)?.finish()
             content()
         }
         is PermissionStatus.Denied -> {

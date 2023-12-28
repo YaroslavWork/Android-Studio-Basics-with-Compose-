@@ -147,7 +147,8 @@ fun LineChartData(
         .backgroundColor(Color.Transparent)
         .labelData { i ->
             val yScale = (abs(minYValue)-abs(maxYValue)) / YAxisSteps
-            val scaledValue = String.format("%.1f", minYValue + (i * yScale)).toDouble()
+            //val scaledValue = String.format("%.1f", minYValue + (i * yScale)).toDouble()
+            val scaledValue =(minYValue + (i * yScale)).toDouble()
             scaledValue.toString()
         }
         .build()

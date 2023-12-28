@@ -2,8 +2,11 @@ package com.example.wifimonitor.ui.screens
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.pm.PackageManager
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.border
@@ -24,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -61,6 +65,14 @@ fun HomeScreen(
     val viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
     val homeUiState by viewModel.homeUiState.collectAsState()
     val estimatedDistanceUiState by viewModel.estimatedDistanceUiState.collectAsState()
+
+    val backCallback = remember {
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+
+            }
+        }
+    }
     Scaffold(
         topBar = {
             WifiMonitorTopAppBar(

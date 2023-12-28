@@ -52,6 +52,8 @@ private fun calculateDistance(rssi: Int, frequency: Int): Double {
 
     val exp = 10.0.pow((abs(rssi) + 27.55 - 20 * log10(frequency.toDouble())) / 20)
     return DecimalFormat("#.##").format(exp).toDouble()
+    //return "%.2f".format(exp).toDouble()
+    //return exp.toDouble()
 }
 
 class HomeViewModel (
